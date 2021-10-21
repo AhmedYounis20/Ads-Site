@@ -1,0 +1,25 @@
+
+
+
+
+
+{% extends 'home.html' %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load humanize %} 
+{% block body %}
+<div class="container">
+    
+    <h1>Delete Ad</h1>
+    
+    <p>Are you sure you want to delete the thing: {{thing}}?</p>
+    
+    <form action="" method="POST">
+{% csrf_token %}     
+ <input type="submit" class="btn btn-primary" value="Yes, delete.">
+      <a href="{% url 'favs:thing_list' %}" class="btn btn-secondary">Cancel</a>
+    
+    </form>
+    
+    </div>
+    {% endblock %}

@@ -1,0 +1,46 @@
+
+
+
+
+{% extends 'home.html' %}
+{% block body %}
+
+
+
+
+<div class="container">
+    
+
+
+
+
+  
+<p class='alert alert-danger'style='font-size:25px; text-align: center; margin-top: 2px; margin-bottom: 2px;'><strong>Please login to see this site.</strong></p>
+  
+
+
+<div style='margin-top:35px; '>
+
+<form method="post" action="/accounts/login/" >
+{% csrf_token %}
+
+<div id="div_id_username" class="form-group"> <label for="id_username" class="control-label  requiredField">
+                Username<span class="asteriskField">*</span> </label> <div class="controls "> <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" class="textinput textInput form-control" required id="id_username"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="control-label  requiredField">
+                Password<span class="asteriskField">*</span> </label> <div class="controls "> <input type="password" name="password" autocomplete="current-password" class="textinput textInput form-control" required id="id_password"> </div> </div>
+
+<input type="submit" class="btn btn-primary" value="Login Locally" />
+
+</form>
+<hr style=' margin-bottom: 2px'/>
+<P style='font-size:15px; text-align: center; margin-top: 2px; margin-bottom: 2px;'><strong>OR</strong></P>
+
+<hr style='  margin-top: 2px;'/>
+<a id="github-button" class="btn  btn-primary btn-social btn-github" href="{% url 'social:begin' 'github' %}">
+    <i class="fa fa-github"></i> Sign in with GitHub
+</a>
+</div>
+</div>
+{% endblock %}
+
+
+

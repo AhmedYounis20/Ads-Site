@@ -1,0 +1,37 @@
+
+
+
+
+
+{% extends 'home.html' %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load humanize %} 
+{% block body %}
+<div class="container">
+    
+
+
+    
+    <span style="float: right;">
+        ({{ thing.created_at|naturaltime }})
+        {% if user == thing.owner %}
+        <a href="{% url 'favs:thing_update' thing.id %}"><i class="fa fa-pencil"></i></a>
+        <a href="{% url 'favs:thing_delete' thing.id %}"><i class="fa fa-trash"></i></a>
+
+        {% endif %}
+    </span>
+    <h1>{{thing}}</h1>
+
+    
+    <p>
+{{thing.text}}
+    </p>
+
+    
+    <br clear="all"/>
+<p> <strong> <a href="{% url 'favs:thing_list' %}"> back to all things </a></strong></p>
+    
+    
+    </div>
+    {% endblock %}

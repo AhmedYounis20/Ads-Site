@@ -1,0 +1,80 @@
+{% extends 'home.html' %}
+
+{% load static %}
+
+{% block head %}  
+<script >function favpost(url,thing_id){
+    fetch(url,{
+        method:"POST",
+        mode:'cors',
+        cache:'no-cache',
+        credentials:"same-origin",
+        headers:{
+            'content_type':'application/x-www-form-urlencoded',
+    
+        },
+        redirect:'follow',
+        referrer:'no-referrer',
+    }).then(function(data){
+        console.log('url','finished');
+        $('#unfavorite_star_'+thing_id).toggle();
+        $('#favorite_star_'+thing_id).toggle();
+    }).catch(()=>{
+        console.log(url,'error')
+    })
+        
+    }</script>
+{% endblock %}
+{% block body %}
+
+
+
+<div class="container">
+    
+    <h1 style="font-weight: 500;"><strong>Favorite Things </strong> </h1>
+    <p>
+    
+    <ul>
+        {% for thing in thing_list %} 
+
+        <li style="color:darkslategrey; font-size: larger; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-style: italic;">
+            <a href="{% url 'favs:thing_detail' thing.id %}">     {{thing}}            </a>
+            
+      {% if user.is_authenticated %} 
+
+            {% if user == thing.owner %}
+            (<a href="{% url 'favs:thing_update' thing.id %}">Edit</a> |
+            <a href="{% url 'favs:thing_delete' thing.id %}">Delete</a>)
+            {% endif %}
+        {% endif %}
+        <a href='#' onclick=favpost("{% url 'favs:unfavorite' thing.id %}",{{thing.id}}) id='unfavorite_star_{{thing.id}}'  {% if thing.id  not in favorite_list %} style='display:none; ' {% endif %}>
+              <span class='fa-stack' style='width: 5px;'> 
+                <i class="fa fa-star fa-stack-1x" style='color:orange;' ></i>
+                <i class="fa fa-star-o fa-stack-1x" ></i> </span>    
+        </a>
+        <a href='#' onclick=favpost("{% url 'favs:favorite' thing.id %}",{{thing.id}})
+         id='favorite_star_{{thing.id}}'  {% if thing.id  in favorite_list %} style='display:none; ' {% endif %}>
+         <span class='fa-stack' style='width: 5px;'> 
+            <i class="fa fa-star-o fa-stack-1x" ></i> </span>  
+               </a>
+        
+        
+        {% endfor %}
+    </li>
+
+    </ul>
+    
+    </p>
+ <div >
+    <p>
+    <strong> <a href="{% url 'favs:thing_create' %}">Add new thing  </a></strong>| <a href="{% url 'logout' %}">Logout  </a>
+    </p>
+ </div>
+    
+    </div>
+
+
+{% endblock %}
+
+
+

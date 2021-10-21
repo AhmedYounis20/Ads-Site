@@ -1,0 +1,61 @@
+{% extends 'home.html' %} 
+
+
+
+{% block head %} 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+{% block body %} 
+
+
+<div class='container container-fluid'>
+    <h1 style="font-size:50px; margin-bottom:40px;" ><em> <strong>current chat</strong></em></h1>
+
+    <form  method='post'  class='form' >
+        {% csrf_token %} 
+        <input type='text' name='message' size='60' placeholder="write a message ...">
+        <input type='submit' class='btn btn-primary' value='send'>
+        <input type='submit' name='reset' class='btn btn-secondary' value='reset'>
+        <a href="">cancel</a>
+        
+        </form>
+</div>
+
+<div class='container' >
+    <h1><em> <strong> Messages </strong></em></h1>
+    <h1 id='loading' >just wait <image src="/static/json/loading.gif"></h1>
+
+    <ul id='messages'>
+
+
+    </ul>
+</div>
+<script>
+function updating() {
+
+$.getJSON('/json/data',function(data){
+    $('#loading').hide();
+
+    $('#messages').empty();
+    for( var message_index=0;message_index<=data.messages.length;message_index++){
+        var message=data.messages[message_index];
+        $('#messages').append('<li> <span style="font-size:30px" ><em> '+message.message +'</em>  </span>  ('+message.created_at+')</li>');
+        console.log( typeof message);
+    }
+
+
+});
+
+    setTimeout(updating,3000);
+}
+
+$(document).ready(()=>{    
+    $.ajaxSetup({cache:false});
+    setTimeout(updating,3000);
+});
+</script>
+
+
+
+{% endblock %}

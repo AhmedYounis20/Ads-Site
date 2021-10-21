@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+<style>
+    .overlay{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      display: none;
+      background-color: rgba(0,0,0,0.5); /*dim the background*/
+    }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="dj4e" content="17463ec465317dc0558d5a5234b7b8ba">
+    <meta name="dj4e-code" content="42163447349034">
+    {% block head %} 
+
+
+    {% endblock %}
+    <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">   
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon.ico'%}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'page.css' %}" >
+    <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    crossorigin="anonymous">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+    crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+
+    <title>Chat app</title>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+              <a class="navbar-brand" href="/ads">younis</a>
+          </div>
+          <!-- https://stackoverflow.com/questions/22047251/django-dynamically-get-view-url-and-check-if-its-the-current-page -->
+            {% if user.is_authenticated %} 
+            <ul class="nav navbar-nav">
+
+            <li {% if request.path == '/ads/' %} class="active"  {% endif %}>
+                <a href="/ads">Ads</a></li>
+                <li {% if request.path == '/json/chat' %} class="active"  {% endif %}>
+                    <a href="/json/chat">Chats</a></li>
+                <li {% if request.path == '/favs/' %} class="active"  {% endif %}>
+                        <a href="/favs">Favorite things</a></li>
+          </ul>
+          {% endif %}
+
+          <ul class="nav navbar-nav navbar-right">
+
+              {% if user.is_authenticated %} 
+               
+              <li {% if request.path == "/ad/create" %} class="active"  {% endif %}>
+                <a href="{% url 'ads:ad_create' %}">Create Ad</a>
+                </li>               
+                <li {% if request.path == "/favs/fav/create" %} class="active"  {% endif %}>
+                    <a href="{% url 'favs:thing_create' %}">Create favorite</a>
+                    </li>
+            <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle"><img style="width: 25px;" src="https://s.gravatar.com/avatar/2fb30b69beed6e4e038f7d5d2a38e83e?s=80"/>{{user.username}}<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="/accounts/logout/">Logout</a></li>
+            </ul>
+        </li>
+        {% else %}
+              <li  {% if request.path == '/accounts/login/' %} class="active"  {% endif %}>
+              <a href="/accounts/login/">Login</a>
+              </li>
+        {% endif %}
+          </ul>
+        </div>
+      </nav>
+
+
+
+
+      {% block body %}
+ 
+
+
+      {% endblock %}
+</body>
+</html>

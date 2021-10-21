@@ -1,0 +1,80 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block body %}
+
+<script >function favpost(url,id){
+    fetch(url,{
+        method:"POST",
+        mode:'cors',
+        cache:'no-cache',
+        credentials:"same-origin",
+        headers:{
+            'content_type':'application/x-www-form-urlencoded',
+    
+        },
+        redirect:'follow',
+        referrer:'no-referrer',
+    }).then(function(data){
+        console.log(url,'finished');
+        $('#unfavorite_star_'+id).toggle();
+        $('#favorite_star_'+id).toggle();
+    }).catch(()=>{
+        console.log(url,'error');
+    })
+        
+    }</script>
+
+<div class="container">
+    
+    <h1 style="font-weight: 500;"><strong>Ads </strong> </h1>
+    <p>
+    
+    <ul>
+        {% for ad in ad_list %} 
+
+        <li style="color:darkslategrey; font-size: larger; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-style: italic;">
+            <a href="{% url 'ads:ad_detail' ad.id %}">     {{ad}}            </a>
+            
+      {% if user.is_authenticated %} 
+
+            {% if user == ad.author %}
+            (<a href="{% url 'ads:ad_update' ad.id %}">Edit</a> |
+            <a href="{% url 'ads:ad_delete' ad.id %}">Delete</a>)
+            {% endif %}
+        {% endif %}
+        <a href='#' onclick=favpost('{% url 'ads:unfavorite' ad.id %}',{{ad.id}}) id='unfavorite_star_{{ad.id}}'  {% if ad.id  not in favorite_list %} style='display:none; ' {% endif %}>
+              <span class='fa-stack' style='width: 5px;'> 
+                <i class="fa fa-star fa-stack-1x" style='color:orange;' ></i>
+                <i class="fa fa-star-o fa-stack-1x" ></i> </span>    
+        </a>
+        <a href='#' onclick=favpost('{% url 'ads:favorite' ad.id %}',{{ad.id}})
+         id='favorite_star_{{ad.id}}'  {% if ad.id  in favorite_list %} style='display:none; ' {% endif %}>
+         <span class='fa-stack' style='width: 5px;'> 
+            <i class="fa fa-star-o fa-stack-1x" ></i> </span>  
+               </a>
+        
+        
+        {% endfor %}
+    </li>
+
+    </ul>
+    
+    </p>
+ <div >
+    <p>
+    <strong> <a href="{% url 'ads:ad_create' %}"> create new AD  </a></strong>|  
+     {% if user.is_authenticated %}   
+       <a href="{% url 'logout' %}">Logout  </a>         
+       {% else %}
+       <a href="{% url 'logout' %}">Login</a>
+       {% endif %}
+
+    </p>
+ </div>
+    
+    </div>
+
+{% endblock %}
+
+
+

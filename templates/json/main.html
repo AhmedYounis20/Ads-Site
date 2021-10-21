@@ -1,0 +1,22 @@
+{% extends 'home.html' %} 
+
+
+
+{% block head %} 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+{% block body %} 
+<div class='title'>
+<h1>just wait <image src="/static/json/loading.gif"></h1>
+</div>
+<script>
+
+$(window).resize(()=>{alert($(window).height(),$(window).width())})
+$.getJSON('/json/data',(data)=>{$('h1').html(data.first)})
+
+</script>
+
+
+
+{% endblock %}
