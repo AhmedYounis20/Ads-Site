@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.urls.base import reverse
 from django.utils.translation import TranslatorCommentWarning
 from django.conf import settings
+from taggit.managers import TaggableManager
 # Create your models here.
 class Ad(models.Model):
     title=models.CharField(max_length=150,)
@@ -10,6 +11,7 @@ class Ad(models.Model):
     text=models.TextField()
     favorites = models.ManyToManyField(settings.AUTH_USER_MODEL,
         through='adFav', related_name='favorite_ads',blank=True)
+    tags=TaggableManager()
     ###### pics
     image=models.BinaryField(null=True,blank=True,editable=True)
     content_type=models.CharField(max_length=500,null=True,blank=True,help_text='the MIMEType of the file')

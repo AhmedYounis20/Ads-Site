@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 class CreateAdView(View,LoginRequiredMixin):
     model=models.Ad
     template_name='ads/CreateAd.html'
@@ -24,6 +25,7 @@ class CreateAdView(View,LoginRequiredMixin):
         ad=form.save(commit=False)
         ad.author=request.user
         ad.save()
+        form.save_m2m()
         return redirect(self.success_url)
     success_url='/ads'
 
@@ -47,6 +49,7 @@ class UpdateAdView(View,LoginRequiredMixin):
             return render(request,self.template_name,context)
         ad=form.save(commit=False)
         ad.save()
+        form.save_m2m()
         return redirect(self.success_url)
 class DeleteAdView(DeleteView,LoginRequiredMixin):
     model=models.Ad
@@ -57,7 +60,18 @@ class DetailAdView(DetailView):
     template_name='ads/DetailAd.html'
 class ListAdView(ListView):
     def get(self,request):
-        ads=models.Ad.objects.all()
+        if request.GET.get('search'):
+            search=request.GET.get('search')
+            query=Q(title__contains=search)
+            query.add(Q(text__contains=search),Q.OR)
+            query.add(Q(tags__name=search),Q.OR)
+            print(models.Ad.objects.filter(tags__name='fashion'))   
+            ads=models.Ad.objects.filter(query).select_related().order_by('-created_at')
+
+            ads=list(set(ads))[:10]
+
+        else:   
+            ads=models.Ad.objects.all()
         favorite_list=[]
         if request.user.is_authenticated :
             favorite_list=self.request.user.favorite_ads.values('id')

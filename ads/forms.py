@@ -12,7 +12,7 @@ class CreateAdForm(forms.ModelForm):
     upload_field_name='image'
     class Meta:
         model=models.Ad
-        fields=['title','price','text','image']
+        fields=['title','price','text','tags','image']
     
     def clean(self):
         cleaned_data=super().clean()
@@ -31,4 +31,5 @@ class CreateAdForm(forms.ModelForm):
             instance.image=bytearr
         if commit:
             instance.save()
+            self.save_m2m()
         return instance
